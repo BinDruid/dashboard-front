@@ -9,3 +9,15 @@ body,
 [class*="apexcharts"] {
   font-family: "Sahel FD" !important;
 }
+
+p {
+  direction: rtl;
+}
+
+.reset-btn {
+  text-decoration: none;
+}
+
+.pivot-chart {
+  direction: ltr;
+}
