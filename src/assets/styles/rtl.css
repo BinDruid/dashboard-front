@@ -1,0 +1,11 @@
+@font-face {
+  font-family: "Sahel FD";
+  src: url("../font/Sahel-FD.woff2") format("woff2");
+  font-style: normal;
+  font-display: swap;
+}
+
+body,
+[class*="apexcharts"] {
+  font-family: "Sahel FD" !important;
+}

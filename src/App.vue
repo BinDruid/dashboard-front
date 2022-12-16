@@ -1,7 +1,7 @@
 <template>
   <div class="row p-2" dir="ltr">
     <div class="col-6">
-      <bar-chart
+      <line-chart
         pivot="month"
         aggregate="avg_delay"
         :filtersAsDict="filtersAsDict"
@@ -50,10 +50,12 @@
 
 <script lang="js">
 import BarChart from "./components/BarChart.vue";
+import LineChart from "./components/LineChart.vue";
 
 export default {
   components:{
-    BarChart
+    BarChart,
+    LineChart
   },
   provide(){
     return {

@@ -1,13 +1,21 @@
 <template>
-  <h4 class="d-inline mx-2">Average Delay for {{ pivot }}</h4>
-  <span v-if="selfFilters">Selected Filter: {{ selfFilters }}</span>
-  <button
-    class="btn btn-warning btn-small"
-    :disabled="selfFilters === ''"
-    @click="resetFilter"
+  <div
+    class="spinner-border text-primary spin-on"
+    role="status"
+    v-if="!chartLoaded"
   >
-    Reset
-  </button>
+    <span class="visually-hidden">Loading...</span>
+  </div>
+  <p v-if="selfFilters">
+    {{ selfFilters }}
+    <button
+      class="btn btn-outline-secondary btn-small"
+      :disabled="selfFilters === ''"
+      @click="resetFilter"
+    >
+      بازنشانی
+    </button>
+  </p>
   <apexchart
     type="bar"
     :pivot="pivot"
@@ -31,6 +39,7 @@ export default {
   data() {
     return {
       baseUrl: `https://fdaneshmand.ir/v1/delay/charts/?pivot=${this.pivot}`,
+      chartLoaded: false,
       chartOptions: {
           chart: {
             id: `bar-chart-${this.pivot}`,
@@ -40,6 +49,20 @@ export default {
             locales: [fa],
             defaultLocale: 'fa',
 
+          },
+          title: {
+            text: `متوسط تاخیر به تفکیک ${this.verboosePivot()}`,
+            align: 'center',
+            margin: 10,
+            offsetX: 0,
+            offsetY: 0,
+            floating: true,
+            style: {
+              fontSize: '14px',
+              fontWeight: 'bold',
+              fontFamily: 'Sahel FD',
+              color: '#263238'
+            },
           },
           xaxis: {
             categories: [],
@@ -96,14 +119,33 @@ export default {
     resetFilter() {
       this.filterReset(this.pivot)
       },
+      replaceData(data){
+        this.chartOptions.xaxis.categories.length = 0
+        this.series[0].data.length = 0
+        data.results.slice(0,this.maximumRows).forEach((dataPoint) => {
+          this.chartOptions.xaxis.categories.push(dataPoint[this.pivot]);
+          this.series[0].data.push(dataPoint[this.aggregate]);
+        });
+      },
+      verboosePivot(){
+      switch (this.pivot){
+        case "train":
+          return "قطار"
+        case "path":
+          return "مسیر"
+        case "region":
+          return "ناحیه"
+        case "year":
+          return "سال"
+        case "month":
+          return "ماه"
+      }
+    },
     async fetchChart(){
+      this.chartLoaded = false
       const { data } = await axios.get(this.baseUrl+this.ignoreSelfUrl);
-      this.chartOptions.xaxis.categories.length = 0
-      this.series[0].data.length = 0
-      data.results.slice(0,this.maximumRows).forEach((dataPoint) => {
-        this.chartOptions.xaxis.categories.push(dataPoint[this.pivot]);
-        this.series[0].data.push(dataPoint[this.aggregate]);
-    });
+      this.replaceData(data)
+      this.chartLoaded = true
     }
   },
   created() {
@@ -111,3 +153,9 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.spin-on {
+  position: relative;
+}
+</style>
