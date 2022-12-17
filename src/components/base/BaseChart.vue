@@ -43,7 +43,7 @@ export default {
     selfFilters() {
       let filters = ""
       if (this.filtersAsDict[this.pivot]) {
-        let baseFilter = `${this.pivot}=`
+        let baseFilter = `${this.verbosePivot()}=`
         baseFilter += this.filtersAsDict[this.pivot].join(",")
         filters += baseFilter
       }

@@ -1,12 +1,11 @@
 <template>
-  <div class="spinner-grow spinner-grow-sm text-primary" role="status" v-if="!chartLoaded">
-    <span class="visually-hidden">Loading...</span>
-  </div>
+  <div class="spinner-grow spinner-grow-sm text-primary" role="status" v-if="!chartLoaded"></div>
   <p v-if="selfFilters">
     {{ selfFilters }}
-    <a class="reset-btn mx-2" :disabled="selfFilters === ''" @click="resetFilter" role="button">
+    <span class="badge rounded-pill bg-danger mx-1 reset-btn" :disabled="selfFilters === ''" @click="resetFilter"
+      role="button">
       بازنشانی
-    </a>
+    </span>
   </p>
   <apexchart type="area" :pivot="pivot" :aggregate="aggregate" :category="category" :filtersAsDict="filtersAsDict"
     :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series" :maximumRows="maximumRows"

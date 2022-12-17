@@ -6,10 +6,13 @@
 
 <script lang="js">
 import DelayCharts from "./components/DelayCharts.vue";
+import DateChart from "./components/DateChart.vue";
+
 
 export default {
   components: {
-    DelayCharts
+    DelayCharts,
+    DateChart,
   },
 }
 </script>

@@ -1,4 +1,6 @@
 <template>
+  <detail-modal :filtersAsUrl="filtersAsUrl" />
+  <jalali-date />
   <div class="row p-2">
     <div class="col-6 pivot-chart">
       <line-chart pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl"
@@ -26,6 +28,9 @@
 <script lang="js">
 import BarChart from "./BarChart.vue";
 import LineChart from "./LineChart.vue";
+import JalaliDate from "./JalaliDate.vue";
+import DetailModal from './base/DetailModal.vue';
+
 import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
 const { VITE_API_URL: API_URL } = import.meta.env
 
@@ -33,7 +38,9 @@ const { VITE_API_URL: API_URL } = import.meta.env
 export default {
   components: {
     BarChart,
-    LineChart
+    LineChart,
+    JalaliDate,
+    DetailModal
   },
   provide() {
     return {
@@ -63,6 +70,11 @@ export default {
   },
   methods: {
     filterChange(filterValue, pivot) {
+      if (pivot === "from-to") {
+        this.filtersAsDict["from"] = [filterValue.from]
+        this.filtersAsDict["to"] = [filterValue.to]
+        return null
+      }
       this.filtersAsDict[pivot] ??= []
       if (!this.filtersAsDict[pivot].includes(filterValue)) this.filtersAsDict[pivot].push(filterValue)
     },

@@ -14,9 +14,11 @@ p {
   direction: rtl;
 }
 
-.reset-btn {
-  text-decoration: none;
-}
+/* .reset-btn {
+  position: absolute;
+  top: 10%;
+  left: 100%;
+} */
 
 .pivot-chart {
   direction: ltr;
