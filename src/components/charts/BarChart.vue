@@ -14,7 +14,7 @@
 
 <script lang="js">
 import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
-import BaseChart from './base/BaseChart.vue';
+import BaseChart from '../base/BaseChart.vue';
 
 export default {
   extends: BaseChart,

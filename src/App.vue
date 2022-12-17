@@ -6,7 +6,7 @@
 
 <script lang="js">
 import DelayCharts from "./components/DelayCharts.vue";
-import DateChart from "./components/DateChart.vue";
+import DateChart from "./components/charts/DateChart.vue";
 
 
 export default {

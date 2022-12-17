@@ -13,7 +13,7 @@
 </template>
 
 <script lang="js">
-import BaseChart from './base/BaseChart.vue';
+import BaseChart from '../base/BaseChart.vue';
 import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
 
 export default {
@@ -82,7 +82,7 @@ export default {
       }
     },
     categoryConvertor(categoryIndex) {
-      return (categoryIndex < 10) ? `0${categoryIndex}` : categoryIndex
+      return (categoryIndex < 10) ? `0${categoryIndex + 1}` : categoryIndex + 1
     },
     selectionHandler(event, chartContext, { seriesIndex, dataPointIndex, config }) {
       let categoryString = ""

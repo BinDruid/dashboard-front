@@ -26,9 +26,9 @@
 </template>
 
 <script lang="js">
-import BarChart from "./BarChart.vue";
-import LineChart from "./LineChart.vue";
-import JalaliDate from "./JalaliDate.vue";
+import BarChart from "./charts/BarChart.vue";
+import LineChart from "./charts/LineChart.vue";
+import JalaliDate from "./base/JalaliDate.vue";
 import DetailModal from './base/DetailModal.vue';
 
 import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
