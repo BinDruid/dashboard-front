@@ -1,18 +1,20 @@
 <template>
-  <section class="p-2">
-    <DelayCharts />
-  </section>
+  <v-locale-provider rtl>
+    <v-container>
+      <DelayCharts />
+    </v-container>
+  </v-locale-provider>
 </template>
 
 <script lang="js">
-import DelayCharts from "./components/DelayCharts.vue";
-import DateChart from "./components/charts/DateChart.vue";
+import DelayCharts from "./pages/DelayCharts.vue";
+import TimeLineCharts from "./pages/TimeLineCharts.vue";
 
 
 export default {
   components: {
     DelayCharts,
-    DateChart,
+    TimeLineCharts,
   },
 }
 </script>

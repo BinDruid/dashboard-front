@@ -1,14 +1,14 @@
 <template>
-  <div class="row">
-    <div class="col">
+  <v-row class="my-1">
+    <v-col>
       <p>تاریخ شروع</p>
       <date-picker simple format="jMM-jDD" display-format="dddd jDD jMMMM jYYYY" v-model="startDate"></date-picker>
-    </div>
-    <div class="col">
+    </v-col>
+    <v-col>
       <p>تاریخ پایان</p>
       <date-picker simple format="jMM-jDD" display-format="dddd jDD jMMMM jYYYY" v-model="endDate"></date-picker>
-    </div>
-  </div>
+    </v-col>
+  </v-row>
 </template>
 
 <script lang="js">

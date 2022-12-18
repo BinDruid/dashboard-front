@@ -1,13 +1,10 @@
 <template>
-  <div class="spinner-grow spinner-grow-sm text-primary" role="status" v-if="!chartLoaded"></div>
-  <p v-if="selfFilters">
+  <v-progress-circular class="text-end" color="teal" indeterminate :size="20" :width="5"
+    v-if="!chartLoaded"></v-progress-circular>
+  <v-chip closable v-if="selfFilters" @click:close="resetFilter">
     {{ selfFilters }}
-    <span class="badge rounded-pill bg-danger mx-1 reset-btn" :disabled="selfFilters === ''" @click="resetFilter"
-      role="button">
-      بازنشانی
-    </span>
-  </p>
-  <apexchart type="bar" :pivot="pivot" :aggregate="aggregate" :filtersAsDict="filtersAsDict"
+  </v-chip>
+  <apexchart class="pivot-chart" type="bar" :pivot="pivot" :aggregate="aggregate" :filtersAsDict="filtersAsDict"
     :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series" :maximumRows="maximumRows"
     @dataPointSelection="selectionHandler"></apexchart>
 </template>

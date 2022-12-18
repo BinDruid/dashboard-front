@@ -1,26 +1,23 @@
 <template>
-    <div class="text-end">
-        <span class="badge rounded-pill bg-primary mx-1 p-2 reset-btn" role="button" data-bs-toggle="modal"
-            data-bs-target="#exampleModal" @click="showDetails">
-            نمایش جزئیات
-        </span>
-        <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h1 class="modal-title fs-5" id="exampleModalLabel">جزئیات</h1>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <train-table :columns="columns" :data="table_data" />
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">بستن</button>
-                    </div>
-                </div>
+    <v-dialog transition="dialog-bottom-transition">
+        <template v-slot:activator="{ props }">
+            <div class="text-left">
+                <v-btn variant="flat" prepend-icon="mdi-text-box-search-outline" color="info" v-bind="props"
+                    @click="showDetails">
+                    نمایش جزئیات
+                </v-btn>
             </div>
-        </div>
-    </div>
+        </template>
+        <template v-slot:default="{ isActive }">
+            <v-card>
+                <v-toolbar color="info" title="جزئیات بر اساس فیلترهای انتخابی"></v-toolbar>
+                <train-table :columns="columns" :data="table_data" />
+                <v-card-actions class="justify-end">
+                    <v-btn variant="flat" color="info" @click="isActive.value = false">بستن</v-btn>
+                </v-card-actions>
+            </v-card>
+        </template>
+    </v-dialog>
 </template>
   
 <script lang="js">

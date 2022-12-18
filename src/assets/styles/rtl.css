@@ -10,15 +10,15 @@ body,
   font-family: "Sahel FD" !important;
 }
 
-p {
-  direction: rtl;
+.v-btn {
+  letter-spacing: initial;
 }
 
-/* .reset-btn {
-  position: absolute;
-  top: 10%;
-  left: 100%;
-} */
+.v-btn--icon.v-btn--density-default {
+  width: 25px;
+  height: 25px;
+  margin: 5px;
+}
 
 .pivot-chart {
   direction: ltr;

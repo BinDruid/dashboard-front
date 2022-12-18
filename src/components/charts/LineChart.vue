@@ -1,15 +1,12 @@
 <template>
-  <div class="spinner-grow spinner-grow-sm text-primary" role="status" v-if="!chartLoaded"></div>
-  <p v-if="selfFilters">
+  <v-progress-circular class="text-end" color="teal" indeterminate :size="20" :width="5"
+    v-if="!chartLoaded"></v-progress-circular>
+  <v-chip closable v-if="selfFilters" @click:close="resetFilter">
     {{ selfFilters }}
-    <span class="badge rounded-pill bg-danger mx-1 reset-btn" :disabled="selfFilters === ''" @click="resetFilter"
-      role="button">
-      بازنشانی
-    </span>
-  </p>
-  <apexchart type="area" :pivot="pivot" :aggregate="aggregate" :category="category" :filtersAsDict="filtersAsDict"
-    :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series" :maximumRows="maximumRows"
-    @markerClick="selectionHandler" @zoomed="zoomHandler"></apexchart>
+  </v-chip>
+  <apexchart class="pivot-chart" type="area" :pivot="pivot" :aggregate="aggregate" :category="category"
+    :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series"
+    :maximumRows="maximumRows" @markerClick="selectionHandler" @zoomed="zoomHandler"></apexchart>
 </template>
 
 <script lang="js">
@@ -26,9 +23,6 @@ export default {
       chartOptions: {
         chart: {
           id: `line-chart-${this.pivot}`,
-          zoom: {
-            enabled: true,
-          },
           locales: [fa],
           defaultLocale: 'fa',
         },
@@ -82,7 +76,7 @@ export default {
       }
     },
     categoryConvertor(categoryIndex) {
-      return (categoryIndex < 10) ? `0${categoryIndex + 1}` : categoryIndex + 1
+      return (categoryIndex < 9) ? `0${categoryIndex + 1}` : categoryIndex + 1
     },
     selectionHandler(event, chartContext, { seriesIndex, dataPointIndex, config }) {
       let categoryString = ""
@@ -96,10 +90,6 @@ export default {
         this.series[0].data.push(dataPoint[this.aggregate]);
       });
     },
-    zoomHandler(chartContext, { xaxis, yaxis }) {
-      // console.log(xaxis)
-      // console.log(yaxis)
-    }
   },
 };
 </script>

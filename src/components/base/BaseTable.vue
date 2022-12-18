@@ -1,8 +1,8 @@
 <template>
-  <table className="table table-info table-striped table-hover table-sm">
+  <v-table density="compact">
     <table-header :columns="columns" />
     <table-body :columns="columns" :data="data" />
-  </table>
+  </v-table>
 </template>
 
 <script lang="js">
