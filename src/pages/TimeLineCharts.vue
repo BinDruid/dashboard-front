@@ -1,5 +1,7 @@
 <template>
   <detail-modal :filtersAsUrl="filtersAsUrl" />
+  <v-select density="compact" clearable label="انتخاب دو سال برای مقایسه"
+    :items="['1400', '1399', '1398', '1397', '1396']" multiple></v-select>
   <v-row no-gutters>
     <v-col cols="6" class="pivot-chart">
       <date-chart pivot="day" aggregate="avg_delay" :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
