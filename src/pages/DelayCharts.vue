@@ -78,6 +78,10 @@ export default {
         this.filtersAsDict["to"] = [filterValue.to]
         return null
       }
+      if (pivot === "year" || pivot === "month") {
+        this.filtersAsDict[pivot] = [filterValue]
+        return null
+      }
       this.filtersAsDict[pivot] ??= []
       if (!this.filtersAsDict[pivot].includes(filterValue)) this.filtersAsDict[pivot].push(filterValue)
     },

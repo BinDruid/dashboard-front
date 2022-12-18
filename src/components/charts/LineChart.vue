@@ -72,7 +72,6 @@ export default {
           return this.yearCategory
         case "month":
           return this.monthCategory
-
       }
     },
     categoryConvertor(categoryIndex) {

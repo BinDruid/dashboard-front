@@ -26,7 +26,6 @@ export default {
           },
           locales: [fa],
           defaultLocale: 'fa',
-
         },
         title: {
           text: `متوسط تاخیر به تفکیک ${this.verbosePivot()}`,
@@ -53,6 +52,18 @@ export default {
         },
         dataLabels: {
           enabled: false
+        },
+        fill: {
+          type: 'gradient',
+          gradient: {
+            shade: 'light',
+            gradientToColors: ['#35D7FC'],
+            shadeIntensity: 1,
+            type: 'horizontal',
+            opacityFrom: 0.9,
+            opacityTo: 1,
+            stops: [0, 20, 100, 100]
+          },
         },
       },
       series: [
