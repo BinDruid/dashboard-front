@@ -1,8 +1,28 @@
 <template>
   <v-locale-provider rtl>
-    <v-container>
-      <DelayCharts />
-    </v-container>
+    <v-app>
+      <v-app-bar density="compact" title="نمودارهای تفکیکی" color="info">
+      </v-app-bar>
+      <v-navigation-drawer permanent :rail="rail" @click="rail = false" location="right" color="info">
+        <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="کارشناس" nav>
+          <template v-slot:append>
+            <v-btn variant="text" icon="mdi-chevron-right" @click.stop="rail = !rail"></v-btn>
+          </template>
+        </v-list-item>
+
+        <v-divider></v-divider>
+        <v-list density="compact" nav>
+          <v-list-item prepend-icon="mdi-home-city" title="صفحه اصلی" value="home"></v-list-item>
+          <v-list-item prepend-icon="mdi-account" title="پروفایل" value="profile"></v-list-item>
+          <v-list-item prepend-icon="mdi-account-group-outline" title="کاربران" value="users"></v-list-item>
+        </v-list>
+      </v-navigation-drawer>
+      <v-main>
+        <v-container>
+          <DelayCharts />
+        </v-container>
+      </v-main>
+    </v-app>
   </v-locale-provider>
 </template>
 
@@ -10,11 +30,15 @@
 import DelayCharts from "./pages/DelayCharts.vue";
 import TimeLineCharts from "./pages/TimeLineCharts.vue";
 
-
 export default {
   components: {
     DelayCharts,
     TimeLineCharts,
+
   },
+  data: () => ({
+    tab: null,
+    rail: true
+  }),
 }
 </script>

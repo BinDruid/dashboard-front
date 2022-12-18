@@ -1,5 +1,5 @@
 <template>
-  <v-table density="compact">
+  <v-table fixed-header density="compact">
     <table-header :columns="columns" />
     <table-body :columns="columns" :data="data" />
   </v-table>
