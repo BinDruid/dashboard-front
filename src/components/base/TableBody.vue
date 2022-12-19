@@ -7,12 +7,15 @@
   </tbody>
 </template>
 
-<script setup>
+<script lang="js">
 import _ from "lodash";
-const props = defineProps(["data", "columns"])
-
-const renderCell = (item, column) => {
-  if (column.content) return column.content(item);
-  return _.get(item, column.path);
-}
+export default {
+  props: ["data", "columns"],
+  methods: {
+    renderCell(item, column) {
+      if (column.content) return column.content(item);
+      return _.get(item, column.path);
+    },
+  }
+};
 </script>

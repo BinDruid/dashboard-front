@@ -1,25 +1,29 @@
 <template>
-  <detail-modal :filtersAsUrl="filtersAsUrl" />
+  <detail-modal endpoint="delay/charts" :filtersAsUrl="filtersAsUrl" />
   <v-row no-gutters>
-    <v-col cols="6">
-      <line-chart pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl"
-        maximumRows="5" category="year" />
-    </v-col>
-    <v-col cols="6">
-      <line-chart pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl"
-        maximumRows="12" category="month" />
+    <v-col cols="4">
+      <line-chart endpoint="delay/charts" pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+        :filtersAsUrl="filtersAsUrl" maximumRows="5" category="year" />
     </v-col>
     <v-col cols="4">
-      <bar-chart pivot="region" aggregate="avg_delay" maximumRows="10" :filtersAsDict="filtersAsDict"
-        :filtersAsUrl="filtersAsUrl" />
+      <line-chart endpoint="delay/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+        :filtersAsUrl="filtersAsUrl" maximumRows="12" category="month" />
     </v-col>
     <v-col cols="4">
-      <bar-chart pivot="path" aggregate="avg_delay" maximumRows="5" :filtersAsDict="filtersAsDict"
-        :filtersAsUrl="filtersAsUrl" />
+      <pie-chart endpoint="stop/charts" pivot="reason" aggregate="avg_stop" maximumRows="5"
+        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
     <v-col cols="4">
-      <bar-chart pivot="train" aggregate="avg_delay" maximumRows="10" :filtersAsDict="filtersAsDict"
-        :filtersAsUrl="filtersAsUrl" />
+      <bar-chart endpoint="delay/charts" pivot="region" aggregate="avg_delay" maximumRows="10"
+        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
+    </v-col>
+    <v-col cols="4">
+      <bar-chart endpoint="delay/charts" pivot="path" aggregate="avg_delay" maximumRows="5"
+        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
+    </v-col>
+    <v-col cols="4">
+      <bar-chart endpoint="delay/charts" pivot="train" aggregate="avg_delay" maximumRows="10"
+        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
   </v-row>
 </template>
@@ -27,6 +31,7 @@
 <script lang="js">
 import BarChart from "../components/charts/BarChart.vue";
 import LineChart from "../components/charts/LineChart.vue";
+import PieChart from "../components/charts/PieChart.vue";
 import CompareChart from "../components/charts/CompareChart.vue";
 import DateChart from "../components/charts/DateChart.vue";
 import JalaliDate from "../components/base/JalaliDate.vue";
@@ -43,7 +48,8 @@ export default {
     CompareChart,
     DateChart,
     JalaliDate,
-    DetailModal
+    DetailModal,
+    PieChart
   },
   provide() {
     return {
@@ -51,12 +57,12 @@ export default {
       filterReset: this.filterReset,
       yearCategory: [1400, 1399, 1398, 1397, 1396],
       monthCategory: fa.options.months,
-      apiEndPoint: this.apiEndPoint
+      api: this.api
     }
   },
   data() {
     return {
-      apiEndPoint: `${API_URL}/delay/charts`,
+      api: `${API_URL}`,
       filtersAsDict: {}
     }
   },

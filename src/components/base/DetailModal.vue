@@ -26,12 +26,12 @@ import TrainTable from './BaseTable.vue';
 
 
 export default {
-    props: ["filtersAsUrl"],
-    inject: ["apiEndPoint"],
+    props: ["endpoint", "filtersAsUrl"],
+    inject: ["api"],
     components: { TrainTable },
     data() {
         return {
-            baseUrl: `${this.apiEndPoint}/?pivot=timeline`,
+            baseUrl: `${this.api}/${this.endpoint}/?pivot=timeline`,
             dataLoaded: false,
             table_data: [],
             columns: [

@@ -1,6 +1,6 @@
 <template>
-  <apexchart class="pivot-chart" type="area" :pivot="pivot" :aggregate="aggregate" :options="chartOptions"
-    :series="series" @beforeZoom="zoomHandler" @beforeResetZoom="resetZoomHandler"></apexchart>
+  <apexchart class="pivot-chart" :endpoint="endpoint" type="area" :pivot="pivot" :aggregate="aggregate"
+    :options="chartOptions" :series="series" @beforeZoom="zoomHandler" @beforeResetZoom="resetZoomHandler"></apexchart>
 </template>
 
 <script lang="js">
@@ -12,7 +12,6 @@ export default {
   extends: BaseChart,
   data() {
     return {
-      baseUrl: `${this.apiEndPoint}/?pivot=${this.pivot}`,
       days: [],
       xMin: null,
       xMax: null,

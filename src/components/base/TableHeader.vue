@@ -7,7 +7,8 @@
     </tr>
   </thead>
 </template>
-
-<script setup>
-const props = defineProps(['columns'])
+<script lang="js">
+export default {
+  props: ["columns"]
+};
 </script>

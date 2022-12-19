@@ -4,9 +4,9 @@
   <v-chip closable v-if="selfFilters" @click:close="resetFilter">
     {{ selfFilters }}
   </v-chip>
-  <apexchart class="pivot-chart" type="area" :pivot="pivot" :aggregate="aggregate" :category="category"
-    :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series"
-    :maximumRows="maximumRows" @markerClick="selectionHandler" @zoomed="zoomHandler"></apexchart>
+  <apexchart class="pivot-chart" :endpoint="endpoint" type="area" :pivot="pivot" :aggregate="aggregate"
+    :category="category" :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions"
+    :series="series" :maximumRows="maximumRows" @markerClick="selectionHandler" @zoomed="zoomHandler"></apexchart>
 </template>
 
 <script lang="js">
@@ -19,7 +19,6 @@ export default {
 
   data() {
     return {
-      baseUrl: `${this.apiEndPoint}/?pivot=${this.pivot}`,
       chartOptions: {
         chart: {
           id: `line-chart-${this.pivot}`,
@@ -30,14 +29,14 @@ export default {
           text: `متوسط تاخیر به تفکیک ${this.verbosePivot()}`,
           align: 'center',
           margin: 10,
-          offsetX: 0,
+          offsetX: -20,
           offsetY: 0,
-          floating: true,
+          floating: false,
           style: {
-            fontSize: '14px',
+            fontSize: '12px',
             fontWeight: 'bold',
             fontFamily: 'Sahel FD',
-            color: '#263238'
+            color: '#008ffb'
           },
         },
         xaxis: {

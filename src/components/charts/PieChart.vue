@@ -4,7 +4,7 @@
   <v-chip closable v-if="selfFilters" @click:close="resetFilter">
     {{ selfFilters }}
   </v-chip>
-  <apexchart class="pivot-chart" type="bar" :endpoint="endpoint" :pivot="pivot" :aggregate="aggregate"
+  <apexchart class="pivot-chart" type="pie" :endpoint="endpoint" :pivot="pivot" :aggregate="aggregate"
     :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series"
     :maximumRows="maximumRows" @dataPointSelection="selectionHandler"></apexchart>
 </template>
@@ -18,20 +18,19 @@ export default {
   data() {
     return {
       chartOptions: {
+        labels: [],
+        series: [],
         chart: {
-          id: `bar-chart-${this.pivot}`,
-          zoom: {
-            enabled: true,
-          },
+          id: `pie-chart-${this.pivot}`,
           locales: [fa],
           defaultLocale: 'fa',
         },
         title: {
-          text: `متوسط تاخیر به تفکیک ${this.verbosePivot()}`,
+          text: `متوسط توقف به تفکیک ${this.verbosePivot()}`,
           align: 'center',
-          margin: 10,
+          margin: 0,
           offsetX: 0,
-          offsetY: 0,
+          offsetY: 5,
           floating: false,
           style: {
             fontSize: '12px',
@@ -40,38 +39,29 @@ export default {
             color: '#008ffb'
           },
         },
-        xaxis: {
-          categories: [],
-        },
-        plotOptions: {
-          bar: {
-            borderRadius: 4,
-            horizontal: true,
+        responsive: [{
+          breakpoint: 480,
+          options: {
+            chart: {
+              width: 200
+            },
+            legend: {
+              position: 'bottom'
+            }
           }
-        },
-        dataLabels: {
-          enabled: false
-        },
-        fill: {
-          type: 'gradient',
-          gradient: {
-            shade: 'light',
-            gradientToColors: ['#35D7FC'],
-            shadeIntensity: 1,
-            type: 'horizontal',
-            opacityFrom: 0.9,
-            opacityTo: 1,
-            stops: [0, 20, 100, 100]
-          },
-        },
+        }],
       },
-      series: [
-        {
-          name: this.aggregate,
-          data: [],
-        },
-      ],
     };
   },
+  methods: {
+    replaceData(data) {
+      this.chartOptions.labels.length = 0
+      this.series.length = 0
+      data.results.slice(0, this.maximumRows).forEach((dataPoint) => {
+        this.chartOptions.labels.push(dataPoint[this.pivot]);
+        this.series.push(Math.round(dataPoint[this.aggregate]));
+      });
+    },
+  }
 };
 </script>

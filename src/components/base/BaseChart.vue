@@ -2,11 +2,11 @@
 import axios from "axios";
 
 export default {
-  props: ["pivot", "filtersAsDict", "filtersAsUrl", "aggregate", "maximumRows"],
-  inject: ["filterChange", "filterReset", "apiEndPoint", "monthCategory", "yearCategory"],
+  props: ["endpoint", "pivot", "filtersAsDict", "filtersAsUrl", "aggregate", "maximumRows"],
+  inject: ["filterChange", "filterReset", "api", "monthCategory", "yearCategory"],
   data() {
     return {
-      baseUrl: "",
+      baseUrl: `${this.api}/${this.endpoint}/?pivot=${this.pivot}`,
       chartLoaded: false,
       chartOptions: {
         chart: {
@@ -78,6 +78,8 @@ export default {
           return "سال"
         case "month":
           return "ماه"
+        case "reason":
+          return "علل توقف"
       }
     },
     async fetchChart() {

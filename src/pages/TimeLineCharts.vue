@@ -34,12 +34,12 @@ export default {
       filterReset: this.filterReset,
       yearCategory: [1400, 1399, 1398, 1397, 1396],
       monthCategory: fa.options.months,
-      apiEndPoint: this.apiEndPoint
+      api: this.api
     }
   },
   data() {
     return {
-      apiEndPoint: `${API_URL}/delay/charts`,
+      api: `${API_URL}/delay/charts`,
       filtersAsDict: {}
     }
   },
