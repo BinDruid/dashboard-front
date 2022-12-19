@@ -4,7 +4,7 @@
       <v-app-bar density="compact" title="نمودارهای تفکیکی" color="info">
       </v-app-bar>
       <v-navigation-drawer permanent :rail="rail" @click="rail = false" location="right" color="info">
-        <v-list-item prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="کارشناس" nav>
+        <v-list-item class="my-2" prepend-avatar="https://randomuser.me/api/portraits/men/85.jpg" title="کارشناس" nav>
           <template v-slot:append>
             <v-btn variant="text" icon="mdi-chevron-right" @click.stop="rail = !rail"></v-btn>
           </template>

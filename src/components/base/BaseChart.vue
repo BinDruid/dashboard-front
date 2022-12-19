@@ -6,7 +6,6 @@ export default {
   inject: ["filterChange", "filterReset", "api", "monthCategory", "yearCategory"],
   data() {
     return {
-      baseUrl: `${this.api}/${this.endpoint}/?pivot=${this.pivot}`,
       chartLoaded: false,
       chartOptions: {
         chart: {
@@ -30,6 +29,9 @@ export default {
     }
   },
   computed: {
+    baseUrl() {
+      return `${this.api}/${this.endpoint}/?pivot=${this.pivot}`
+    },
     ignoreSelfUrl() {
       let filters = ""
       for (const filter in this.filtersAsDict)

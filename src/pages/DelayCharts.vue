@@ -1,5 +1,5 @@
 <template>
-  <detail-modal endpoint="delay/charts" :filtersAsUrl="filtersAsUrl" />
+  <detail-modal :filtersAsUrl="filtersAsUrl" />
   <v-row no-gutters>
     <v-col cols="4">
       <line-chart endpoint="delay/charts" pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
@@ -14,7 +14,7 @@
         :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delay/charts" pivot="region" aggregate="avg_delay" maximumRows="10"
+      <bar-chart endpoint="delay/charts" pivot="region" aggregate="avg_delay" maximumRows="20"
         :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
     <v-col cols="4">

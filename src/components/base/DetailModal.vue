@@ -1,12 +1,18 @@
 <template>
     <v-dialog transition="dialog-bottom-transition">
         <template v-slot:activator="{ props }">
-            <div class="text-left">
-                <v-btn variant="flat" prepend-icon="mdi-text-box-search-outline" color="info" v-bind="props"
-                    @click="showDetails">
-                    نمایش جزئیات
-                </v-btn>
-            </div>
+            <v-row class="pa-1" align="center" justify="end">
+                <v-col cols="3">
+                    <v-switch color="info" v-model="detailEndpoint" hide-details true-value="جدول تاخیرات"
+                        false-value="جدول علل توقف" :label="`نمایش جزئیات از: ${detailEndpoint}`"></v-switch>
+                </v-col>
+                <v-col cols="2">
+                    <v-btn variant="flat" prepend-icon="mdi-text-box-search-outline" color="info" v-bind="props"
+                        @click="showDetails">
+                        نمایش جزئیات
+                    </v-btn>
+                </v-col>
+            </v-row>
         </template>
         <template v-slot:default="{ isActive }">
             <v-card>
@@ -26,13 +32,14 @@ import TrainTable from './BaseTable.vue';
 
 
 export default {
-    props: ["endpoint", "filtersAsUrl"],
+    props: ["filtersAsUrl"],
     inject: ["api"],
     components: { TrainTable },
     data() {
         return {
-            baseUrl: `${this.api}/${this.endpoint}/?pivot=timeline`,
+            detailEndpoint: 'جدول تاخیرات',
             dataLoaded: false,
+            endpoint: "delay/charts",
             table_data: [],
             columns: [
                 { lable: "قطار", path: "train_name" },
@@ -41,6 +48,40 @@ export default {
                 { lable: "تاریخ حرکت", path: "travel_date" },
                 { lable: "مجموع تاخیر", path: "total_delay" },
             ]
+        }
+    },
+    computed: {
+        baseUrl() {
+            return `${this.api}/${this.endpoint}/?pivot=timeline`
+        }
+    },
+    watch: {
+        detailEndpoint(value) {
+            if (value === 'جدول تاخیرات') {
+                this.endpoint = "delay/charts"
+                this.columns = [
+                    { lable: "قطار", path: "train_name" },
+                    { lable: "ناحیه", path: "region" },
+                    { lable: "مسیر", path: "path" },
+                    { lable: "تاریخ حرکت", path: "travel_date" },
+                    { lable: "مجموع تاخیر", path: "total_delay" },
+                ]
+            }
+            if (value === 'جدول علل توقف') {
+                this.endpoint = "stop/charts"
+                this.columns = [
+                    { lable: "قطار", path: "train_name" },
+                    { lable: "ناحیه", path: "region" },
+                    { lable: "مسیر", path: "path" },
+                    { lable: "تاریخ حرکت", path: "travel_date" },
+                    { lable: "گروه علت توقف", path: "reason_group" },
+                    { lable: "علت توقف", path: "reason_label" },
+                    { lable: "ایستگاه", path: "station_name" },
+                    { lable: "توقف در ایستگاه", path: "station_stop" },
+                ]
+
+            }
+
         }
     },
     methods: {
