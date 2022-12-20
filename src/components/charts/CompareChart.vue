@@ -1,4 +1,4 @@
-<template>
+<template>>
   <v-progress-circular color="teal" indeterminate :size="20" :width="5" v-if="!chartLoaded"></v-progress-circular>
   <p v-if="selfFilters">
     {{ selfFilters }}
@@ -8,7 +8,7 @@
   </p>
   <apexchart class="pivot-chart" :pivot="pivot" :aggregate="aggregate" :category="category"
     :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series"
-    :maximumRows="maximumRows" @markerClick="selectionHandler" @zoomed="zoomHandler"></apexchart>
+    :maximumRows="maximumRows" @markerClick="selectionHandler"></apexchart>
 </template>
 
 <script lang="js">
@@ -16,11 +16,13 @@ import axios from "axios";
 import LineCHart from './LineChart.vue';
 import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
 
+
 export default {
   extends: LineCHart,
 
   data() {
     return {
+      yearsSelected: ["1399", "1400"],
       chartOptions: {
         chart: {
           id: `line-chart-${this.pivot}-2`,
@@ -74,7 +76,7 @@ export default {
         tooltip: {
           fixed: {
             enabled: true,
-            position: 'topLeft', // topRight, topLeft, bottomRight, bottomLeft
+            position: 'topLeft',
             offsetY: 30,
             offsetX: 60
           },
@@ -98,8 +100,8 @@ export default {
   methods: {
     async fetchChart() {
       this.chartLoaded = false
-      const { data: chartA } = await axios.get(this.baseUrl + "&year=1400");
-      const { data: chartB } = await axios.get(this.baseUrl + "&year=1399");
+      const { data: chartA } = await axios.get(this.baseUrl + `&year=${this.yearsSelected[0]}`);
+      const { data: chartB } = await axios.get(this.baseUrl + `&year=${this.yearsSelected[1]}`);
       this.replaceData(chartA, chartB)
       this.chartLoaded = true
     },

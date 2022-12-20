@@ -62,7 +62,7 @@ export default {
   },
   data() {
     return {
-      api: `${API_URL}`,
+      api: API_URL,
       filtersAsDict: {}
     }
   },

@@ -6,7 +6,7 @@
   </v-chip>
   <apexchart class="pivot-chart" type="pie" :endpoint="endpoint" :pivot="pivot" :aggregate="aggregate"
     :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series"
-    :maximumRows="maximumRows" @dataPointSelection="selectionHandler"></apexchart>
+    :maximumRows="maximumRows"></apexchart>
 </template>
 
 <script lang="js">
@@ -24,6 +24,19 @@ export default {
           id: `pie-chart-${this.pivot}`,
           locales: [fa],
           defaultLocale: 'fa',
+        },
+        noData: {
+          text: 'داده‌ای برای نمایش وجود ندارد',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
+          style: {
+            fontSize: '12px',
+            fontWeight: 'bold',
+            fontFamily: 'Sahel FD',
+            color: '#008ffb'
+          }
         },
         title: {
           text: `متوسط توقف به تفکیک ${this.verbosePivot()}`,

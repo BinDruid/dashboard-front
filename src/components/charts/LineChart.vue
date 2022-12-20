@@ -6,7 +6,7 @@
   </v-chip>
   <apexchart class="pivot-chart" :endpoint="endpoint" type="area" :pivot="pivot" :aggregate="aggregate"
     :category="category" :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions"
-    :series="series" :maximumRows="maximumRows" @markerClick="selectionHandler" @zoomed="zoomHandler"></apexchart>
+    :series="series" :maximumRows="maximumRows" @markerClick="selectionHandler"></apexchart>
 </template>
 
 <script lang="js">
@@ -24,6 +24,19 @@ export default {
           id: `line-chart-${this.pivot}`,
           locales: [fa],
           defaultLocale: 'fa',
+        },
+        noData: {
+          text: 'داده‌ای برای نمایش وجود ندارد',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
+          style: {
+            fontSize: '12px',
+            fontWeight: 'bold',
+            fontFamily: 'Sahel FD',
+            color: '#008ffb'
+          }
         },
         title: {
           text: `متوسط تاخیر به تفکیک ${this.verbosePivot()}`,

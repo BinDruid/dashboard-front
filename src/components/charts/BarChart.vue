@@ -26,6 +26,19 @@ export default {
           locales: [fa],
           defaultLocale: 'fa',
         },
+        noData: {
+          text: 'داده‌ای برای نمایش وجود ندارد',
+          align: 'center',
+          verticalAlign: 'middle',
+          offsetX: 0,
+          offsetY: 0,
+          style: {
+            fontSize: '12px',
+            fontWeight: 'bold',
+            fontFamily: 'Sahel FD',
+            color: '#008ffb'
+          }
+        },
         title: {
           text: `متوسط تاخیر به تفکیک ${this.verbosePivot()}`,
           align: 'center',

@@ -9,17 +9,20 @@
             <v-btn variant="text" icon="mdi-chevron-right" @click.stop="rail = !rail"></v-btn>
           </template>
         </v-list-item>
-
         <v-divider></v-divider>
         <v-list density="compact" nav>
-          <v-list-item prepend-icon="mdi-home-city" title="صفحه اصلی" value="home"></v-list-item>
-          <v-list-item prepend-icon="mdi-account" title="پروفایل" value="profile"></v-list-item>
+          <router-link to="/"> <v-list-item prepend-icon="mdi-home-city" title="نمودار تفکیکی" value="home">
+            </v-list-item>
+          </router-link>
+          <router-link to="/timeline"> <v-list-item prepend-icon="mdi-account" title="نمودار زمانی"
+              value="profile"></v-list-item>
+          </router-link>
           <v-list-item prepend-icon="mdi-account-group-outline" title="کاربران" value="users"></v-list-item>
         </v-list>
       </v-navigation-drawer>
       <v-main>
         <v-container>
-          <DelayCharts />
+          <router-view></router-view>
         </v-container>
       </v-main>
     </v-app>
@@ -27,15 +30,9 @@
 </template>
 
 <script lang="js">
-import DelayCharts from "./pages/DelayCharts.vue";
-import TimeLineCharts from "./pages/TimeLineCharts.vue";
 
 export default {
-  components: {
-    DelayCharts,
-    TimeLineCharts,
 
-  },
   data: () => ({
     tab: null,
     rail: true
