@@ -7,11 +7,11 @@
   </v-row>
   <v-row no-gutters>
     <v-col cols="6" class="pivot-chart">
-      <compare-chart endpoint="delay/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+      <compare-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
         :filtersAsUrl="filtersAsUrl" maximumRows="12" category="month" />
     </v-col>
     <v-col cols="6" class="pivot-chart">
-      <date-chart endpoint="delay/charts" pivot="day" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+      <date-chart endpoint="delays/charts" pivot="day" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
         :filtersAsUrl="filtersAsUrl" />
     </v-col>
   </v-row>

@@ -2,27 +2,27 @@
   <detail-modal :filtersAsUrl="filtersAsUrl" />
   <v-row no-gutters>
     <v-col cols="4">
-      <line-chart endpoint="delay/charts" pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+      <line-chart endpoint="delays/charts" pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
         :filtersAsUrl="filtersAsUrl" maximumRows="5" category="year" />
     </v-col>
     <v-col cols="4">
-      <line-chart endpoint="delay/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+      <line-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
         :filtersAsUrl="filtersAsUrl" maximumRows="12" category="month" />
     </v-col>
     <v-col cols="4">
-      <pie-chart endpoint="stop/charts" pivot="reason" aggregate="avg_stop" maximumRows="5"
+      <pie-chart endpoint="stops/charts" pivot="reason" aggregate="avg_stop" maximumRows="5"
         :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delay/charts" pivot="region" aggregate="avg_delay" maximumRows="20"
+      <bar-chart endpoint="delays/charts" pivot="region" aggregate="avg_delay" maximumRows="20"
         :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delay/charts" pivot="path" aggregate="avg_delay" maximumRows="5"
+      <bar-chart endpoint="delays/charts" pivot="path" aggregate="avg_delay" maximumRows="5"
         :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delay/charts" pivot="train" aggregate="avg_delay" maximumRows="10"
+      <bar-chart endpoint="delays/charts" pivot="train" aggregate="avg_delay" maximumRows="10"
         :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
     </v-col>
   </v-row>

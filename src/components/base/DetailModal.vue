@@ -39,7 +39,7 @@ export default {
         return {
             detailEndpoint: 'جدول تاخیرات',
             dataLoaded: false,
-            endpoint: "delay/charts",
+            endpoint: "delays/charts",
             table_data: [],
             columns: [
                 { lable: "قطار", path: "train_name" },
@@ -58,7 +58,7 @@ export default {
     watch: {
         detailEndpoint(value) {
             if (value === 'جدول تاخیرات') {
-                this.endpoint = "delay/charts"
+                this.endpoint = "delays/charts"
                 this.columns = [
                     { lable: "قطار", path: "train_name" },
                     { lable: "ناحیه", path: "region" },
@@ -68,7 +68,7 @@ export default {
                 ]
             }
             if (value === 'جدول علل توقف') {
-                this.endpoint = "stop/charts"
+                this.endpoint = "stops/charts"
                 this.columns = [
                     { lable: "قطار", path: "train_name" },
                     { lable: "ناحیه", path: "region" },
