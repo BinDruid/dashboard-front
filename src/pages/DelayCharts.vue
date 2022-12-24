@@ -28,72 +28,53 @@
   </v-row>
 </template>
 
-<script lang="js">
+
+<script setup>
 import BarChart from "../components/charts/BarChart.vue";
 import LineChart from "../components/charts/LineChart.vue";
 import PieChart from "../components/charts/PieChart.vue";
-import CompareChart from "../components/charts/CompareChart.vue";
-import DateChart from "../components/charts/DateChart.vue";
-import JalaliDate from "../components/base/JalaliDate.vue";
 import DetailModal from '../components/base/DetailModal.vue';
+import { ref, computed, provide } from 'vue'
 
-import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
+
+import fa from 'apexcharts/dist/locales/fa.json';
 const { VITE_API_URL: API_URL } = import.meta.env
 
+const api = API_URL
+const filtersAsDict = ref({})
 
-export default {
-  components: {
-    BarChart,
-    LineChart,
-    CompareChart,
-    DateChart,
-    JalaliDate,
-    DetailModal,
-    PieChart
-  },
-  provide() {
-    return {
-      filterChange: this.filterChange,
-      filterReset: this.filterReset,
-      yearCategory: [1400, 1399, 1398, 1397, 1396],
-      monthCategory: fa.options.months,
-      api: this.api
-    }
-  },
-  data() {
-    return {
-      api: API_URL,
-      filtersAsDict: {}
-    }
-  },
-  computed: {
-    filtersAsUrl() {
-      let filters = ""
-      for (const filter in this.filtersAsDict) {
-        let baseFilter = `&${filter}=`
-        baseFilter += this.filtersAsDict[filter].join(",")
-        filters += baseFilter
-      }
-      return filters
-    }
-  },
-  methods: {
-    filterChange(filterValue, pivot) {
-      if (pivot === "from-to") {
-        this.filtersAsDict["from"] = [filterValue.from]
-        this.filtersAsDict["to"] = [filterValue.to]
-        return null
-      }
-      if (pivot === "year" || pivot === "month") {
-        this.filtersAsDict[pivot] = [filterValue]
-        return null
-      }
-      this.filtersAsDict[pivot] ??= []
-      if (!this.filtersAsDict[pivot].includes(filterValue)) this.filtersAsDict[pivot].push(filterValue)
-    },
-    filterReset(pivot) {
-      delete this.filtersAsDict[pivot]
-    },
+const filtersAsUrl = computed(() => {
+  let filters = ""
+  for (const filter in filtersAsDict.value) {
+    let baseFilter = `&${filter}=`
+    baseFilter += filtersAsDict.value[filter].join(",")
+    filters += baseFilter
   }
-};
+  return filters
+})
+
+
+const filterReset = (pivot) => {
+  delete filtersAsDict.value[pivot]
+}
+
+const filterChange = (filterValue, pivot) => {
+  if (pivot === "from-to") {
+    filtersAsDict.value["from"] = [filterValue.from]
+    filtersAsDict.value["to"] = [filterValue.to]
+    return null
+  }
+  if (pivot === "year" || pivot === "month") {
+    filtersAsDict.value[pivot] = [filterValue]
+    return null
+  }
+  filtersAsDict.value[pivot] ??= []
+  if (!filtersAsDict.value[pivot].includes(filterValue)) filtersAsDict.value[pivot].push(filterValue)
+}
+
+provide('filterChange', filterChange)
+provide('filterReset', filterReset)
+provide('yearCategory', [1400, 1399, 1398, 1397, 1396])
+provide('monthCategory', fa.options.months)
+provide('api', api)
 </script>

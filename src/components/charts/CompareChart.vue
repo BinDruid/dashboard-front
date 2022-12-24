@@ -11,121 +11,173 @@
     :maximumRows="maximumRows" @markerClick="selectionHandler"></apexchart>
 </template>
 
-<script lang="js">
+
+<script setup>
 import axios from "axios";
-import LineCHart from './LineChart.vue';
-import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
+import { ref, computed, watch, inject, onMounted } from 'vue'
+import fa from 'apexcharts/dist/locales/fa.json'
 
+const props = defineProps(["endpoint", "pivot", "filtersAsDict", "filtersAsUrl", "aggregate", "maximumRows"])
+const filterChange = inject("filterChange")
+const filterReset = inject("filterReset")
+const api = inject("api")
+const monthCategory = inject("monthCategory")
+const yearCategory = inject("yearCategory")
+const chartLoaded = ref(false)
+const yearsSelected = ["1399", "1400"]
+const verbosePivot = computed(() => {
+  switch (props.pivot) {
+    case "train":
+      return "قطار"
+    case "path":
+      return "مسیر"
+    case "region":
+      return "ناحیه"
+    case "year":
+      return "سال"
+    case "month":
+      return "ماه"
+    case "reason":
+      return "علل توقف"
+  }
+})
 
-export default {
-  extends: LineCHart,
+const categorySelector = () => {
+  switch (props.category) {
+    case "year":
+      return yearCategory
+    case "month":
+      return monthCategory
+  }
+}
 
-  data() {
-    return {
-      yearsSelected: ["1399", "1400"],
-      chartOptions: {
-        chart: {
-          id: `line-chart-${this.pivot}-2`,
-          locales: [fa],
-          defaultLocale: 'fa',
-          height: 100
-        },
-        title: {
-          text: `روند تاخیرات در دو سال متوالی به تفکیک ${this.verbosePivot()}`,
-          align: 'center',
-          margin: 10,
-          offsetX: 0,
-          offsetY: 0,
-          floating: true,
-          style: {
-            fontSize: '14px',
-            fontWeight: 'bold',
-            fontFamily: 'Sahel FD',
-            color: '#263238'
-          },
-        },
-        xaxis: {
-          categories: this.categorySelector(),
-          labels: {
-            show: true,
-            rotate: -45,
-            rotateAlways: true,
-            hideOverlappingLabels: true,
-            showDuplicates: false,
-            trim: false,
-            minHeight: undefined,
-            maxHeight: 120,
-            style: {
-              colors: [],
-              fontSize: '12px',
-              fontFamily: 'Sahel FD',
-              fontWeight: 400,
-            },
-          },
-        },
-        yaxis: {
-          tooltip: {
-            enabled: true,
-            offsetX: 0,
-          },
-        },
-        dataLabels: {
-          enabled: true,
-          enabledOnSeries: [2]
-        },
-        tooltip: {
-          fixed: {
-            enabled: true,
-            position: 'topLeft',
-            offsetY: 30,
-            offsetX: 60
-          },
-        },
+const chartOptions = ref({
+  chart: {
+    id: `line-chart-${props.pivot}-2`,
+    locales: [fa],
+    defaultLocale: 'fa',
+    height: 100
+  },
+  title: {
+    text: `روند تاخیرات در دو سال متوالی به تفکیک ${verbosePivot.value}`,
+    align: 'center',
+    margin: 10,
+    offsetX: 0,
+    offsetY: 0,
+    floating: true,
+    style: {
+      fontSize: '14px',
+      fontWeight: 'bold',
+      fontFamily: 'Sahel FD',
+      color: '#263238'
+    },
+  },
+  xaxis: {
+    categories: categorySelector(),
+    labels: {
+      show: true,
+      rotate: -45,
+      rotateAlways: true,
+      hideOverlappingLabels: true,
+      showDuplicates: false,
+      trim: false,
+      minHeight: undefined,
+      maxHeight: 120,
+      style: {
+        colors: [],
+        fontSize: '12px',
+        fontFamily: 'Sahel FD',
+        fontWeight: 400,
       },
-      series: [
-        {
-          name: "سال ۱۴۰۰",
-          data: [],
-          type: 'bar',
-        },
-        {
-          name: "سال ۱۳۹۹",
-          data: [],
-          type: 'bar',
+    },
+  },
+  yaxis: {
+    tooltip: {
+      enabled: true,
+      offsetX: 0,
+    },
+  },
+  dataLabels: {
+    enabled: true,
+    enabledOnSeries: [2]
+  },
+  tooltip: {
+    fixed: {
+      enabled: true,
+      position: 'topLeft',
+      offsetY: 30,
+      offsetX: 60
+    },
+  },
+})
+const series = ref([
+  {
+    name: "سال ۱۴۰۰",
+    data: [],
+    type: 'bar',
+  },
+  {
+    name: "سال ۱۳۹۹",
+    data: [],
+    type: 'bar',
 
-        },
-      ],
-    };
   },
-  methods: {
-    async fetchChart() {
-      this.chartLoaded = false
-      const { data: chartA } = await axios.get(this.baseUrl + `&year=${this.yearsSelected[0]}`);
-      const { data: chartB } = await axios.get(this.baseUrl + `&year=${this.yearsSelected[1]}`);
-      this.replaceData(chartA, chartB)
-      this.chartLoaded = true
-    },
-    replaceData(chartA, chartB) {
-      this.series[0].data.length = 0
-      this.series[1].data.length = 0
-      chartA.results.slice(0, this.maximumRows).forEach((dataPoint) => {
-        this.series[0].data.push(dataPoint[this.aggregate]);
-      });
-      chartB.results.slice(0, this.maximumRows).forEach((dataPoint) => {
-        this.series[1].data.push(dataPoint[this.aggregate]);
-      });
-      this.showDifference(this.series[0].data, this.series[1].data)
-    },
-    showDifference(arr1, arr2) {
-      this.series.push({
-        name: "تغییرات",
-        data: [],
-        type: 'line',
-      })
-      const length = Math.max(arr1.length, arr2.length)
-      for (let i = 0; i < length; i++)
-        this.series[2].data.push(Math.abs((arr1[i] || 0) - (arr2[i] || 0)).toFixed(2));
-    }
-  },
-};
+],)
+
+watch((props.filtersAsDict), () => { fetchChart() })
+
+const selectionHandler = (e, chartContext, config) => {
+  const selected = chartOptions.value.xaxis.categories[config.dataPointIndex]
+  filterChange(selected, props.pivot)
+}
+
+const resetFilter = () => {
+  filterReset(props.pivot)
+}
+
+const baseUrl = computed(() => { return `${api}/${props.endpoint}/?pivot=${props.pivot}` })
+
+const selfFilters = computed(() => {
+  let filters = ""
+  if (props.filtersAsDict[props.pivot]) {
+    let baseFilter = `${verbosePivot.value}=`
+    baseFilter += props.filtersAsDict[props.pivot].join(",")
+    filters += baseFilter
+  }
+  return filters
+})
+
+const showDifference = (arr1, arr2) => {
+  series.value.push({
+    name: "تغییرات",
+    data: [],
+    type: 'line',
+  })
+  const length = Math.max(arr1.length, arr2.length)
+  for (let i = 0; i < length; i++)
+    series.value[2].data.push(Math.abs((arr1[i] || 0) - (arr2[i] || 0)).toFixed(2));
+}
+
+const replaceData = (chartA, chartB) => {
+  series.value[0].data.length = 0
+  series.value[1].data.length = 0
+  chartA.results.slice(0, props.maximumRows).forEach((dataPoint) => {
+    series.value[0].data.push(dataPoint[props.aggregate]);
+  });
+  chartB.results.slice(0, props.maximumRows).forEach((dataPoint) => {
+    series.value[1].data.push(dataPoint[props.aggregate]);
+  });
+  showDifference(series.value[0].data, series.value[1].data)
+}
+
+const fetchChart = async () => {
+  chartLoaded.value = false
+  const { data: chartA } = await axios.get(baseUrl.value + `&year=${yearsSelected[0]}`);
+  const { data: chartB } = await axios.get(baseUrl.value + `&year=${yearsSelected[1]}`);
+  replaceData(chartA, chartB)
+  chartLoaded.value = true
+}
+
+onMounted(() => fetchChart())
+
 </script>
