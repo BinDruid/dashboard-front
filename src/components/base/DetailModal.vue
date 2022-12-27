@@ -3,7 +3,7 @@
         <template v-slot:activator="{ props }">
             <v-row class="pa-1" align="center" justify="end">
                 <v-col cols="3">
-                    <v-switch color="info" v-model:value="detailEndpoint" hide-details true-value="جدول تاخیرات"
+                    <v-switch color="info" v-model="detailEndpoint" hide-details true-value="جدول تاخیرات"
                         false-value="جدول علل توقف" :label="`نمایش جزئیات از: ${detailEndpoint}`"></v-switch>
                 </v-col>
                 <v-col cols="2">
@@ -33,21 +33,16 @@ import TrainTable from './BaseTable.vue';
 
 const props = defineProps(['filtersAsUrl'])
 const api = inject('api')
-const detailEndpoint = ref('جدول تاخیرات')
+const detailEndpoint = ref("جدول تاخیرات")
 const dataLoaded = ref(false)
 const endpoint = ref("delays/charts")
 const table_data = ref([])
-const columns = ref([
-    { lable: "قطار", path: "train_name" },
-    { lable: "ناحیه", path: "region" },
-    { lable: "مسیر", path: "path" },
-    { lable: "تاریخ حرکت", path: "travel_date" },
-    { lable: "مجموع تاخیر", path: "total_delay" },
-])
+const columns = ref([])
 
 const baseUrl = computed(() => { return `${api}/${endpoint.value}/?pivot=timeline` })
-watch((detailEndpoint, (newValue) => {
-    if (newValue === 'جدول تاخیرات') {
+
+const showDetails = async () => {
+    if (detailEndpoint.value === 'جدول تاخیرات') {
         endpoint.value = "delays/charts"
         columns.value = [
             { lable: "قطار", path: "train_name" },
@@ -57,7 +52,7 @@ watch((detailEndpoint, (newValue) => {
             { lable: "مجموع تاخیر", path: "total_delay" },
         ]
     }
-    if (newValue === 'جدول علل توقف') {
+    if (detailEndpoint.value === 'جدول علل توقف') {
         endpoint.value = "stops/charts"
         columns.value = [
             { lable: "قطار", path: "train_name" },
@@ -71,9 +66,6 @@ watch((detailEndpoint, (newValue) => {
         ]
 
     }
-}))
-
-const showDetails = async () => {
     table_data.value.length = 0
     dataLoaded.value = false
     const { data } = await axios.get(baseUrl.value + props.filtersAsUrl);

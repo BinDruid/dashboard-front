@@ -30,11 +30,11 @@
 
 
 <script setup>
+import { ref, computed, provide } from 'vue'
 import BarChart from "../components/charts/BarChart.vue";
 import LineChart from "../components/charts/LineChart.vue";
 import PieChart from "../components/charts/PieChart.vue";
 import DetailModal from '../components/base/DetailModal.vue';
-import { ref, computed, provide } from 'vue'
 
 
 import fa from 'apexcharts/dist/locales/fa.json';
