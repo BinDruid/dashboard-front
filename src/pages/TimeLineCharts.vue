@@ -7,72 +7,57 @@
   </v-row>
   <v-row no-gutters>
     <v-col cols="6" class="pivot-chart">
-      <compare-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :queryFilters="queryFilters"
-        :filtersAsUrl="filtersAsUrl" maxCategory="12" category="month" />
+      <compare-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :query-filters="queryFilters"
+        max-category="12" category="month" />
     </v-col>
     <v-col cols="6" class="pivot-chart">
-      <date-chart endpoint="delays/charts" pivot="day" aggregate="avg_delay" :queryFilters="queryFilters"
-        :filtersAsUrl="filtersAsUrl" />
+      <date-chart endpoint="delays/charts" pivot="day" aggregate="avg_delay" :query-filters="queryFilters" />
     </v-col>
   </v-row>
 </template>
 
-<script lang="js">
-import CompareChart from "../components/charts/CompareChart.vue";
-import DateChart from "../components/charts/DateChart.vue";
-import DetailModal from '../components/base/DetailModal.vue';
+<script setup>
+import { ref, computed, provide } from 'vue'
 
-import fa from 'apexcharts/dist/locales/fa.json' assert {type: 'json'};
+import DateChart from "../components/charts/DateChart.vue";
+import CompareChart from "../components/charts/CompareChart.vue";
+
+import fa from 'apexcharts/dist/locales/fa.json';
 const { VITE_API_URL: API_URL } = import.meta.env
 
+const years = ['1400', '1399', '1398', '1397', '1396']
+const api = API_URL
+const queryFilters = ref({})
+const selectedYears = ref(null)
 
-export default {
-  components: {
-    CompareChart,
-    DateChart,
-    DetailModal
-  },
-  provide() {
-    return {
-      filterChange: this.filterChange,
-      filterReset: this.filterReset,
-      yearCategory: [1400, 1399, 1398, 1397, 1396],
-      monthCategory: fa.options.months,
-      api: this.api,
-    }
-  },
-  data() {
-    return {
-      api: API_URL,
-      selectedYears: null,
-      queryFilters: {},
-      years: ['1400', '1399', '1398', '1397', '1396']
-    }
-  },
-  computed: {
-    filtersAsUrl() {
-      let filters = ""
-      for (const filter in this.queryFilters) {
-        let baseFilter = `&${filter}=`
-        baseFilter += this.queryFilters[filter].join(",")
-        filters += baseFilter
-      }
-      return filters
-    }
-  },
-  methods: {
-    filterChange(filterValue, pivot) {
-      if (pivot === "from-to") {
-        this.queryFilters["from"] = [filterValue.from]
-        this.queryFilters["to"] = [filterValue.to]
-        return null
-      }
-      this.queryFilters[pivot] ??= []
-      if (!this.queryFilters[pivot].includes(filterValue)) this.queryFilters[pivot].push(filterValue)
-    },
-    filterReset(pivot) {
-      delete this.queryFilters[pivot]
-    },
+const filtersAsUrl = computed(() => {
+  let filters = ""
+  for (const filter in queryFilters.value) {
+    let baseFilter = `&${filter}=`
+    baseFilter += queryFilters.value[filter].join(",")
+    filters += baseFilter
   }
-};
+  return filters
+})
+
+const filterReset = (pivot) => {
+  delete queryFilters.value[pivot]
+}
+
+const filterChange = (filterValue, pivot) => {
+  if (pivot === "from-to") {
+    queryFilters.value["from"] = [filterValue.from]
+    queryFilters.value["to"] = [filterValue.to]
+    return null
+  }
+  queryFilters.value[pivot] ??= []
+  if (!queryFilters.value[pivot].includes(filterValue)) queryFilters.value[pivot].push(filterValue)
+}
+
+provide('filterChange', filterChange)
+provide('filterReset', filterReset)
+provide('yearCategory', [1400, 1399, 1398, 1397, 1396])
+provide('monthCategory', fa.options.months)
+provide('api', api)
+
 </script>
