@@ -2,7 +2,7 @@
 import axios from "axios";
 import { ref, computed, watch, inject, onMounted } from 'vue'
 
-const props = defineProps(["endpoint", "pivot", "filtersAsDict", "filtersAsUrl", "aggregate", "maximumRows"])
+const props = defineProps(["endpoint", "pivot", "queryFilters", "filtersAsUrl", "aggregate", "maxCategory"])
 const filterChange = inject("filterChange")
 const filterReset = inject("filterReset")
 const api = inject("api")
@@ -53,12 +53,12 @@ const verbosePivot = () => {
 }
 
 const baseUrl = computed(() => { return `${api}/${props.endpoint}/?pivot=${props.pivot}` })
-const ignoreSelfUrl = computed(() => {
+const extraFilters = computed(() => {
   let filters = ""
-  for (const filter in props.filtersAsDict)
+  for (const filter in props.queryFilters)
     if (filter !== props.pivot) {
       let baseFilter = `&${filter}=`
-      baseFilter += props.filtersAsDict[filter].join(",")
+      baseFilter += props.queryFilters[filter].join(",")
       filters += baseFilter
     }
   return filters
@@ -66,9 +66,9 @@ const ignoreSelfUrl = computed(() => {
 
 const selfFilters = computed(() => {
   let filters = ""
-  if (props.filtersAsDict[props.pivot]) {
+  if (props.queryFilters[props.pivot]) {
     let baseFilter = `${verbosePivot()}=`
-    baseFilter += props.filtersAsDict[props.pivot].join(",")
+    baseFilter += props.queryFilters[props.pivot].join(",")
     filters += baseFilter
   }
   return filters
@@ -78,7 +78,7 @@ const selfFilters = computed(() => {
 const replaceData = (data) => {
   chartOptions.xaxis.categories.value.length = 0
   series.value[0].data.length = 0
-  data.results.slice(0, props.maximumRows).forEach((dataPoint) => {
+  data.results.slice(0, props.maxCategory).forEach((dataPoint) => {
     chartOptions.xaxis.categories.value.push(dataPoint[props.pivot]);
     series.value[0].data.push(dataPoint[props.aggregate]);
   });
@@ -86,7 +86,7 @@ const replaceData = (data) => {
 
 const fetchChart = async () => {
   chartLoaded.value = false
-  const { data } = await axios.get(baseUrl.value + ignoreSelfUrl.value);
+  const { data } = await axios.get(baseUrl.value + extraFilters.value);
   replaceData(data)
   chartLoaded.value = true
 }

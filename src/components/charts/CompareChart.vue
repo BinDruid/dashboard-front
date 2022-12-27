@@ -6,9 +6,9 @@
       <v-icon>mdi-cached</v-icon>
     </v-btn>
   </p>
-  <apexchart class="pivot-chart" :pivot="pivot" :aggregate="aggregate" :category="category"
-    :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series"
-    :maximumRows="maximumRows" @markerClick="selectionHandler"></apexchart>
+  <apexchart class="pivot-chart" :pivot="pivot" :aggregate="aggregate" :category="category" :queryFilters="queryFilters"
+    :filtersAsUrl="filtersAsUrl" :options="chartOptions" :series="series" :maxCategory="maxCategory"
+    @markerClick="selectionHandler"></apexchart>
 </template>
 
 
@@ -17,7 +17,7 @@ import axios from "axios";
 import { ref, computed, watch, inject, onMounted } from 'vue'
 import fa from 'apexcharts/dist/locales/fa.json'
 
-const props = defineProps(["endpoint", "pivot", "filtersAsDict", "filtersAsUrl", "aggregate", "maximumRows"])
+const props = defineProps(["endpoint", "pivot", "queryFilters", "filtersAsUrl", "aggregate", "maxCategory"])
 const filterChange = inject("filterChange")
 const filterReset = inject("filterReset")
 const api = inject("api")
@@ -124,7 +124,7 @@ const series = ref([
   },
 ],)
 
-watch((props.filtersAsDict), () => { fetchChart() })
+watch((props.queryFilters), () => { fetchChart() })
 
 const selectionHandler = (e, chartContext, config) => {
   const selected = chartOptions.value.xaxis.categories[config.dataPointIndex]
@@ -139,9 +139,9 @@ const baseUrl = computed(() => { return `${api}/${props.endpoint}/?pivot=${props
 
 const selfFilters = computed(() => {
   let filters = ""
-  if (props.filtersAsDict[props.pivot]) {
+  if (props.queryFilters[props.pivot]) {
     let baseFilter = `${verbosePivot.value}=`
-    baseFilter += props.filtersAsDict[props.pivot].join(",")
+    baseFilter += props.queryFilters[props.pivot].join(",")
     filters += baseFilter
   }
   return filters
@@ -161,10 +161,10 @@ const showDifference = (arr1, arr2) => {
 const replaceData = (chartA, chartB) => {
   series.value[0].data.length = 0
   series.value[1].data.length = 0
-  chartA.results.slice(0, props.maximumRows).forEach((dataPoint) => {
+  chartA.results.slice(0, props.maxCategory).forEach((dataPoint) => {
     series.value[0].data.push(dataPoint[props.aggregate]);
   });
-  chartB.results.slice(0, props.maximumRows).forEach((dataPoint) => {
+  chartB.results.slice(0, props.maxCategory).forEach((dataPoint) => {
     series.value[1].data.push(dataPoint[props.aggregate]);
   });
   showDifference(series.value[0].data, series.value[1].data)

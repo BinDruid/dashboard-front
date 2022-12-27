@@ -2,28 +2,28 @@
   <detail-modal :filtersAsUrl="filtersAsUrl" />
   <v-row no-gutters>
     <v-col cols="4">
-      <line-chart endpoint="delays/charts" pivot="year" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
-        :filtersAsUrl="filtersAsUrl" maximumRows="5" category="year" />
+      <line-chart endpoint="delays/charts" pivot="year" aggregate="avg_delay" :query-filters="queryFilters"
+        max-category="5" category="year" />
     </v-col>
     <v-col cols="4">
-      <line-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
-        :filtersAsUrl="filtersAsUrl" maximumRows="12" category="month" />
+      <line-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :query-filters="queryFilters"
+        max-category="12" category="month" />
     </v-col>
     <v-col cols="4">
-      <pie-chart endpoint="stops/charts" pivot="reason" aggregate="avg_stop" maximumRows="5"
-        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
+      <pie-chart endpoint="stops/charts" pivot="reason" aggregate="avg_stop" max-category="5"
+        :query-filters="queryFilters" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delays/charts" pivot="region" aggregate="avg_delay" maximumRows="20"
-        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
+      <bar-chart endpoint="delays/charts" pivot="region" aggregate="avg_delay" max-category="10"
+        :query-filters="queryFilters" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delays/charts" pivot="path" aggregate="avg_delay" maximumRows="5"
-        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
+      <bar-chart endpoint="delays/charts" pivot="path" aggregate="avg_delay" max-category="5"
+        :query-filters="queryFilters" />
     </v-col>
     <v-col cols="4">
-      <bar-chart endpoint="delays/charts" pivot="train" aggregate="avg_delay" maximumRows="10"
-        :filtersAsDict="filtersAsDict" :filtersAsUrl="filtersAsUrl" />
+      <bar-chart endpoint="delays/charts" pivot="train" aggregate="avg_delay" max-category="10"
+        :query-filters="queryFilters" />
     </v-col>
   </v-row>
 </template>
@@ -41,13 +41,13 @@ import fa from 'apexcharts/dist/locales/fa.json';
 const { VITE_API_URL: API_URL } = import.meta.env
 
 const api = API_URL
-const filtersAsDict = ref({})
+const queryFilters = ref({})
 
 const filtersAsUrl = computed(() => {
   let filters = ""
-  for (const filter in filtersAsDict.value) {
+  for (const filter in queryFilters.value) {
     let baseFilter = `&${filter}=`
-    baseFilter += filtersAsDict.value[filter].join(",")
+    baseFilter += queryFilters.value[filter].join(",")
     filters += baseFilter
   }
   return filters
@@ -55,21 +55,21 @@ const filtersAsUrl = computed(() => {
 
 
 const filterReset = (pivot) => {
-  delete filtersAsDict.value[pivot]
+  delete queryFilters.value[pivot]
 }
 
 const filterChange = (filterValue, pivot) => {
   if (pivot === "from-to") {
-    filtersAsDict.value["from"] = [filterValue.from]
-    filtersAsDict.value["to"] = [filterValue.to]
+    queryFilters.value["from"] = [filterValue.from]
+    queryFilters.value["to"] = [filterValue.to]
     return null
   }
   if (pivot === "year" || pivot === "month") {
-    filtersAsDict.value[pivot] = [filterValue]
+    queryFilters.value[pivot] = [filterValue]
     return null
   }
-  filtersAsDict.value[pivot] ??= []
-  if (!filtersAsDict.value[pivot].includes(filterValue)) filtersAsDict.value[pivot].push(filterValue)
+  queryFilters.value[pivot] ??= []
+  if (!queryFilters.value[pivot].includes(filterValue)) queryFilters.value[pivot].push(filterValue)
 }
 
 provide('filterChange', filterChange)

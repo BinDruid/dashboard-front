@@ -7,11 +7,11 @@
   </v-row>
   <v-row no-gutters>
     <v-col cols="6" class="pivot-chart">
-      <compare-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
-        :filtersAsUrl="filtersAsUrl" maximumRows="12" category="month" />
+      <compare-chart endpoint="delays/charts" pivot="month" aggregate="avg_delay" :queryFilters="queryFilters"
+        :filtersAsUrl="filtersAsUrl" maxCategory="12" category="month" />
     </v-col>
     <v-col cols="6" class="pivot-chart">
-      <date-chart endpoint="delays/charts" pivot="day" aggregate="avg_delay" :filtersAsDict="filtersAsDict"
+      <date-chart endpoint="delays/charts" pivot="day" aggregate="avg_delay" :queryFilters="queryFilters"
         :filtersAsUrl="filtersAsUrl" />
     </v-col>
   </v-row>
@@ -45,16 +45,16 @@ export default {
     return {
       api: API_URL,
       selectedYears: null,
-      filtersAsDict: {},
+      queryFilters: {},
       years: ['1400', '1399', '1398', '1397', '1396']
     }
   },
   computed: {
     filtersAsUrl() {
       let filters = ""
-      for (const filter in this.filtersAsDict) {
+      for (const filter in this.queryFilters) {
         let baseFilter = `&${filter}=`
-        baseFilter += this.filtersAsDict[filter].join(",")
+        baseFilter += this.queryFilters[filter].join(",")
         filters += baseFilter
       }
       return filters
@@ -63,15 +63,15 @@ export default {
   methods: {
     filterChange(filterValue, pivot) {
       if (pivot === "from-to") {
-        this.filtersAsDict["from"] = [filterValue.from]
-        this.filtersAsDict["to"] = [filterValue.to]
+        this.queryFilters["from"] = [filterValue.from]
+        this.queryFilters["to"] = [filterValue.to]
         return null
       }
-      this.filtersAsDict[pivot] ??= []
-      if (!this.filtersAsDict[pivot].includes(filterValue)) this.filtersAsDict[pivot].push(filterValue)
+      this.queryFilters[pivot] ??= []
+      if (!this.queryFilters[pivot].includes(filterValue)) this.queryFilters[pivot].push(filterValue)
     },
     filterReset(pivot) {
-      delete this.filtersAsDict[pivot]
+      delete this.queryFilters[pivot]
     },
   }
 };

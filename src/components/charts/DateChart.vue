@@ -48,7 +48,7 @@ export default {
   },
   computed: {
     year() {
-      return this.filtersAsDict["year"] ?? "1400"
+      return this.queryFilters["year"] ?? "1400"
     }
   },
   methods: {
