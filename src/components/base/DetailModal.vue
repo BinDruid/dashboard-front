@@ -26,75 +26,54 @@
     </v-dialog>
 </template>
   
-<script lang="js">
+<script setup>
+import { ref, computed, watch, inject } from 'vue'
 import axios from "axios";
 import TrainTable from './BaseTable.vue';
 
+const props = defineProps(['filtersAsUrl'])
+const api = inject('api')
+const detailEndpoint = ref("جدول تاخیرات")
+const dataLoaded = ref(false)
+const endpoint = ref("delays/charts")
+const table_data = ref([])
+const columns = ref([])
 
-export default {
-    props: ["filtersAsUrl"],
-    inject: ["api"],
-    components: { TrainTable },
-    data() {
-        return {
-            detailEndpoint: 'جدول تاخیرات',
-            dataLoaded: false,
-            endpoint: "delays/charts",
-            table_data: [],
-            columns: [
-                { lable: "قطار", path: "train_name" },
-                { lable: "ناحیه", path: "region" },
-                { lable: "مسیر", path: "path" },
-                { lable: "تاریخ حرکت", path: "travel_date" },
-                { lable: "مجموع تاخیر", path: "total_delay" },
-            ]
-        }
-    },
-    computed: {
-        baseUrl() {
-            return `${this.api}/${this.endpoint}/?pivot=timeline`
-        }
-    },
-    watch: {
-        detailEndpoint(value) {
-            if (value === 'جدول تاخیرات') {
-                this.endpoint = "delays/charts"
-                this.columns = [
-                    { lable: "قطار", path: "train_name" },
-                    { lable: "ناحیه", path: "region" },
-                    { lable: "مسیر", path: "path" },
-                    { lable: "تاریخ حرکت", path: "travel_date" },
-                    { lable: "مجموع تاخیر", path: "total_delay" },
-                ]
-            }
-            if (value === 'جدول علل توقف') {
-                this.endpoint = "stops/charts"
-                this.columns = [
-                    { lable: "قطار", path: "train_name" },
-                    { lable: "ناحیه", path: "region" },
-                    { lable: "مسیر", path: "path" },
-                    { lable: "تاریخ حرکت", path: "travel_date" },
-                    { lable: "گروه علت توقف", path: "reason_group" },
-                    { lable: "علت توقف", path: "reason_label" },
-                    { lable: "ایستگاه", path: "station_name" },
-                    { lable: "توقف در ایستگاه", path: "station_stop" },
-                ]
+const baseUrl = computed(() => { return `${api}/${endpoint.value}/?pivot=timeline` })
 
-            }
-
-        }
-    },
-    methods: {
-        async showDetails() {
-            this.table_data.length = 0
-            this.dataLoaded = false
-            const { data } = await axios.get(this.baseUrl + this.filtersAsUrl);
-            data.results.slice(0, 10).forEach(element => {
-                this.table_data.push(element)
-            });
-            this.dataLoaded = true
-        },
+const showDetails = async () => {
+    if (detailEndpoint.value === 'جدول تاخیرات') {
+        endpoint.value = "delays/charts"
+        columns.value = [
+            { lable: "قطار", path: "train_name" },
+            { lable: "ناحیه", path: "region" },
+            { lable: "مسیر", path: "path" },
+            { lable: "تاریخ حرکت", path: "travel_date" },
+            { lable: "مجموع تاخیر", path: "total_delay" },
+        ]
     }
-};
+    if (detailEndpoint.value === 'جدول علل توقف') {
+        endpoint.value = "stops/charts"
+        columns.value = [
+            { lable: "قطار", path: "train_name" },
+            { lable: "ناحیه", path: "region" },
+            { lable: "مسیر", path: "path" },
+            { lable: "تاریخ حرکت", path: "travel_date" },
+            { lable: "گروه علت توقف", path: "reason_group" },
+            { lable: "علت توقف", path: "reason_label" },
+            { lable: "ایستگاه", path: "station_name" },
+            { lable: "توقف در ایستگاه", path: "station_stop" },
+        ]
+
+    }
+    table_data.value.length = 0
+    dataLoaded.value = false
+    const { data } = await axios.get(baseUrl.value + props.filtersAsUrl);
+    data.results.slice(0, 10).forEach(element => {
+        table_data.value.push(element)
+    });
+    dataLoaded.value = true
+}
+
 </script>
   

@@ -5,12 +5,8 @@
   </v-table>
 </template>
 
-<script lang="js">
+<script setup>
 import TableBody from './TableBody.vue';
 import TableHeader from './TableHeader.vue';
-
-export default {
-  props: ["data", "columns"],
-  components: { TableBody, TableHeader }
-};
+const props = defineProps(["data", "columns"])
 </script>
