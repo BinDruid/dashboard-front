@@ -1,5 +1,12 @@
 <template>
-  <detail-modal :filtersAsUrl="filtersAsUrl" />
+  <v-row no-gutters class="pa-1" align="center">
+    <v-col cols="2">
+      <v-btn variant="flat" prepend-icon="mdi-refresh" color="info" @click="resetAll">
+        بازنشانی فیلترها </v-btn> </v-col>
+    <v-col cols="10">
+      <detail-modal :filtersAsUrl="filtersAsUrl" />
+    </v-col>
+  </v-row>
   <v-row no-gutters>
     <v-col cols="4">
       <line-chart endpoint="delays/charts" pivot="year" aggregate="avg_delay" :query-filters="queryFilters"
@@ -57,6 +64,13 @@ const filtersAsUrl = computed(() => {
 const filterReset = (pivot) => {
   delete queryFilters.value[pivot]
 }
+
+const resetAll = () => {
+  for (const filter in queryFilters.value) {
+    delete queryFilters.value[filter]
+  }
+}
+
 
 const filterChange = (filterValue, pivot) => {
   if (pivot === "from-to") {

@@ -1,8 +1,13 @@
 <template>
-  <v-row class="pa-1" align="center" justify="start">
+  <v-row class="pa-1" align="top" justify="start">
     <v-col cols="3">
       <v-select density="compact" return-object v-model="selectedYears" clearable label="انتخاب دو سال برای مقایسه"
         :items="years" multiple></v-select>
+    </v-col>
+    <v-col cols="2">
+      <v-btn variant="flat" prepend-icon="mdi-text-box-search-outline" color="info" @click="performCompare">
+        مقایسه
+      </v-btn>
     </v-col>
   </v-row>
   <v-row no-gutters>
@@ -30,16 +35,6 @@ const api = API_URL
 const queryFilters = ref({})
 const selectedYears = ref(null)
 
-const filtersAsUrl = computed(() => {
-  let filters = ""
-  for (const filter in queryFilters.value) {
-    let baseFilter = `&${filter}=`
-    baseFilter += queryFilters.value[filter].join(",")
-    filters += baseFilter
-  }
-  return filters
-})
-
 const filterReset = (pivot) => {
   delete queryFilters.value[pivot]
 }
@@ -53,6 +48,8 @@ const filterChange = (filterValue, pivot) => {
   queryFilters.value[pivot] ??= []
   if (!queryFilters.value[pivot].includes(filterValue)) queryFilters.value[pivot].push(filterValue)
 }
+
+const performCompare = () => { console.log(selectedYears.value) }
 
 provide('filterChange', filterChange)
 provide('filterReset', filterReset)

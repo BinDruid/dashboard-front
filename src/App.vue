@@ -29,13 +29,10 @@
   </v-locale-provider>
 </template>
 
-<script lang="js">
+<script setup>
+import { ref } from 'vue'
 
-export default {
+const tab = ref(null)
+const rail = ref(true)
 
-  data: () => ({
-    tab: null,
-    rail: true
-  }),
-}
 </script>

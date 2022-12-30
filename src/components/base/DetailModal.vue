@@ -2,7 +2,7 @@
     <v-dialog transition="dialog-bottom-transition">
         <template v-slot:activator="{ props }">
             <v-row class="pa-1" align="center" justify="end">
-                <v-col cols="3">
+                <v-col cols="4">
                     <v-switch color="info" v-model="detailEndpoint" hide-details true-value="جدول تاخیرات"
                         false-value="جدول علل توقف" :label="`نمایش جزئیات از: ${detailEndpoint}`"></v-switch>
                 </v-col>
